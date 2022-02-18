@@ -2,6 +2,8 @@ module github.com/humanmade/go-anonymize-mysqldump
 
 go 1.14
 
+replace github.com/humanmade/go-anonymize-mysqldump => github.com/everadaptive/go-anonymize-mysqldump v0.0.0-20220218130239-e85d0d2a7aae
+
 require (
 	github.com/akamensky/argparse v0.0.0-20191006154803-1427fe674291
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect

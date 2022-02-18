@@ -1,10 +1,12 @@
 package main
 
-var ExampleWordPressConfig = Config{
-	Patterns: []ConfigPattern{
+import "github.com/humanmade/go-anonymize-mysqldump/pkg"
+
+var ExampleWordPressConfig = pkg.Config{
+	Patterns: []pkg.ConfigPattern{
 		{
 			TableName: "wp_users",
-			Fields: []PatternField{
+			Fields: []pkg.PatternField{
 				{
 					Field:       "user_login",
 					Type:        "username",
@@ -45,12 +47,12 @@ var ExampleWordPressConfig = Config{
 		},
 		{
 			TableName: "wp_usermeta",
-			Fields: []PatternField{
+			Fields: []pkg.PatternField{
 				{
 					Field:    "meta_value",
 					Position: 4,
 					Type:     "firstName",
-					Constraints: []PatternFieldConstraint{
+					Constraints: []pkg.PatternFieldConstraint{
 						{
 							Field:    "meta_key",
 							Position: 3,
@@ -62,7 +64,7 @@ var ExampleWordPressConfig = Config{
 					Field:    "meta_value",
 					Position: 4,
 					Type:     "lastName",
-					Constraints: []PatternFieldConstraint{
+					Constraints: []pkg.PatternFieldConstraint{
 						{
 							Field:    "meta_key",
 							Position: 3,
@@ -74,7 +76,7 @@ var ExampleWordPressConfig = Config{
 					Field:    "meta_value",
 					Position: 4,
 					Type:     "firstName",
-					Constraints: []PatternFieldConstraint{
+					Constraints: []pkg.PatternFieldConstraint{
 						{
 							Field:    "meta_key",
 							Position: 3,
@@ -86,7 +88,7 @@ var ExampleWordPressConfig = Config{
 					Field:    "meta_value",
 					Position: 4,
 					Type:     "paragraph",
-					Constraints: []PatternFieldConstraint{
+					Constraints: []pkg.PatternFieldConstraint{
 						{
 							Field:    "meta_key",
 							Position: 3,
@@ -98,7 +100,7 @@ var ExampleWordPressConfig = Config{
 		},
 		{
 			TableName: "wp_comments",
-			Fields: []PatternField{
+			Fields: []pkg.PatternField{
 				{
 					Field:       "comment_author",
 					Type:        "username",
