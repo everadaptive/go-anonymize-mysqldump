@@ -301,11 +301,11 @@ func rowObeysConstraints(constraints []PatternFieldConstraint, row sqlparser.Val
 
 		if constraint.regex != nil {
 			ret = constraint.regex.Match([]byte(parsedValue))
-			return ret == constraint.InvertMatch
+			return ret != constraint.InvertMatch
 		}
 
 		if parsedValue != constraint.Value {
-			return ret == constraint.InvertMatch
+			return ret != constraint.InvertMatch
 		}
 	}
 	return true
