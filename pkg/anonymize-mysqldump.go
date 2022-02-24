@@ -3,6 +3,7 @@ package pkg
 import (
 	"bufio"
 	"io"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -30,6 +31,8 @@ type PatternFieldConstraint struct {
 	Field    string `json:"field"`
 	Position int    `json:"position"`
 	Value    string `json:"value"`
+	Regex    string `json:"regex"`
+	regex    *regexp.Regexp
 }
 
 var (
@@ -273,16 +276,35 @@ func modifyValues(values sqlparser.Values, pattern ConfigPattern) (sqlparser.Val
 
 func rowObeysConstraints(constraints []PatternFieldConstraint, row sqlparser.ValTuple) bool {
 	for _, constraint := range constraints {
+		ret := false
 		valTupleIndex := constraint.Position - 1
 		value := row[valTupleIndex].(*sqlparser.SQLVal)
+
+		if constraint.Regex != "" && constraint.regex == nil {
+			r, err := regexp.Compile(constraint.Regex)
+			if err != nil {
+				logrus.WithFields(logrus.Fields{
+					"constraint.regex": constraint.Regex,
+				}).Fatal(err)
+			}
+
+			constraint.regex = r
+		}
 
 		parsedValue := convertSQLValToString(value)
 		logrus.WithFields(logrus.Fields{
 			"parsedValue":      parsedValue,
 			"constraint.value": constraint.Value,
+			"constraint.regex": constraint.Regex,
 		}).Trace("Debuging constraint obediance: ")
+
+		if constraint.regex != nil {
+			ret = constraint.regex.Match([]byte(parsedValue))
+			return ret
+		}
+
 		if parsedValue != constraint.Value {
-			return false
+			return ret
 		}
 	}
 	return true
