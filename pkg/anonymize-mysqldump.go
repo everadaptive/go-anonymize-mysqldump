@@ -28,11 +28,12 @@ type PatternField struct {
 }
 
 type PatternFieldConstraint struct {
-	Field    string `json:"field"`
-	Position int    `json:"position"`
-	Value    string `json:"value"`
-	Regex    string `json:"regex"`
-	regex    *regexp.Regexp
+	Field       string `json:"field"`
+	Position    int    `json:"position"`
+	Value       string `json:"value"`
+	Regex       string `json:"regex"`
+	InvertMatch bool   `json:"invertMatch"`
+	regex       *regexp.Regexp
 }
 
 var (
@@ -300,11 +301,11 @@ func rowObeysConstraints(constraints []PatternFieldConstraint, row sqlparser.Val
 
 		if constraint.regex != nil {
 			ret = constraint.regex.Match([]byte(parsedValue))
-			return ret
+			return ret && constraint.InvertMatch
 		}
 
 		if parsedValue != constraint.Value {
-			return ret
+			return ret && constraint.InvertMatch
 		}
 	}
 	return true
